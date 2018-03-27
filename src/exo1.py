@@ -11,16 +11,17 @@ class Test:
     conn.close()
 
 
-
     table = []
     equipements = []
     activites = []
 
+    """Les tables utilisées afin de stocker les informations des fichiers csv"""
     def __init__(self):
         self.table=[]
         self.equipements=[]
         self.activites=[]
 
+    """La fonction affichage permet d'afficher les fichiers csv"""
     def affichage(self,fichier):
         if fichier=="1":
             with open('23440003400026_J335_installations_table.csv', newline='') as csvfile:
@@ -42,6 +43,7 @@ class Test:
                 for row in spamreader:
                     print(', '.join(row))
 
+    """La fonction importcsv permet d'importer un fichier csv filename dans nos tables"""
     def importcsv(self, filename,fichier):
         fname = filename
         file = open(fname, "r")
@@ -61,7 +63,7 @@ class Test:
                     print(row)
         finally:
             file.close()
-
+    """La fonction importintobd permet d'importer un fichier csv directement dans notre base de donnée sqlLite"""
     def importintobd(self,fichier):
         conn = sqlite3.connect('ma_base.db')
         cursor = conn.cursor()
@@ -83,7 +85,7 @@ class Test:
                 for line in reader:
                     cursor.execute('INSERT INTO Activities(ComInsee,ComLib,EquipementId,EquNbEquIdentique,ActCode,ActLib,EquActivitePraticable,EquActivitePratique,EquActiviteSalleSpe,ActNivLib) VALUES(?,?,?,?,?,?,?,?,?,?)',line)
                     conn.commit()
-
+    """La fonction get_posts permet d'afficher le contenu de l'une des bases de données"""
     def get_posts(self,fichier):
         conn = sqlite3.connect('ma_base.db')
         cursor = conn.cursor()
@@ -109,6 +111,7 @@ class Test:
                 if row == None: break
             conn.close()
 
+    """La fonction getbyNomInstallation permet de faire des recherches au sein de la/les base(s) de donnée"""
     def getbyNomInstallation(self,fichier):
         conn = sqlite3.connect('ma_base.db')
         cursor = conn.cursor()
@@ -122,7 +125,7 @@ class Test:
                 if row == None: break
             conn.close()
         if fichier=="2":
-            print("Saisir le nom de la commune que vous recherchez :")
+            print("Saisir le nom de la commune que vous recherchez (Installations) :")
             saisie = input()
             lines = cursor.execute('''select * from Installation where NomCommune=?''', (saisie,))
             while True:
@@ -130,7 +133,17 @@ class Test:
                 print(row)
                 if row == None: break
             conn.close()
+        if fichier=="3":
+            print("Saisir le nom de la commune que vous recherchez (Activities) :")
+            saisie = input()
+            lines = cursor.execute('''select * from Activities where ComLib=?''', (saisie,))
+            while True:
+                row = cursor.fetchone()
+                print(row)
+                if row == None: break
+            conn.close()
 
+    """La fonction menu fait office de menu lors de l'utilisation de notre classe directement depuis un terminal"""
     def menu(self):
         print("-----Hello-----")
         print("1.Afficher")
@@ -175,13 +188,17 @@ class Test:
         elif saisie == "3":
             print("Choisir votre type de recherche :")
             print("1.Recherche par nom d'installation")
-            print("2.Recherche par commune")
+            print("2.Recherche par commune (Installations)")
+            print("3.Recherche par commune (Activities)")
             num=input()
             if num=="1":
                 self.getbyNomInstallation("1")
                 self.menu()
             elif num=="2":
                 self.getbyNomInstallation("2")
+                self.menu()
+            elif num=="3":
+                self.getbyNomInstallation("3")
                 self.menu()
         elif saisie=="4":
             print("Bye !")

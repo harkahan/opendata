@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* {
+  box-sizing: border-box;
+}
+body {
+  font: 16px Arial;
+}
+.autocomplete {
+  /*the container must be positioned relative:*/
+  position: relative;
+  display: inline-block;
+}
+input {
+  border: 1px solid transparent;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 16px;
+}
+input[type=text] {
+  background-color: #f1f1f1;
+  width: 100%;
+}
+input[type=submit] {
+  background-color: DodgerBlue;
+  color: #fff;
+  cursor: pointer;
+}
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9;
+}
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Bienvenue sur notre API Web</h1>
+
+<h2>Envie de faire une recherche ?</h2>
+
+  <div class="autocomplete" style="width:300px;">
+      <form>Recherche par nom d'installation
+    <input id="ri" type="text" name="ri" placeholder="nom installation">
+        <input type="submit">
+          </form>
+      <form>Recherche par commune (Installations)
+      <input id="rci" type="text" name="rci" placeholder="nom commune">
+              <input type="submit">
+          </form>
+      <form>Recherche par commune (Activities)
+    <input id="Recherche par commune (Activities)" type="text" name="rca" placeholder="nom commune">
+              <input type="submit">
+          </form>
+  </div>
+
+<h2>Afficher la base</h2>
+<form>
+    <form>
+    Afficher la table Installation <br>
+    <input type="submit" value="Installations">
+    </form>
+    <form>
+    Afficher la table Activities <br>
+    <input type="submit" value="Activities">
+    </form>
+    <form>
+    Afficher la table Equipements <br>
+    <input type="submit" value="Equipements">
+    </form>
+</form>
+
+
+</body>
+</html>
