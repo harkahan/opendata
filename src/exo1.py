@@ -14,12 +14,18 @@ class Test:
     table = []
     equipements = []
     activites = []
+    select1 = []
+    select2 = []
+    select3 = []
 
     """Les tables utilisées afin de stocker les informations des fichiers csv"""
     def __init__(self):
         self.table=[]
         self.equipements=[]
         self.activites=[]
+        self.select1=[]
+        self.select2=[]
+        self.select3=[]
 
     """La fonction affichage permet d'afficher les fichiers csv"""
     def affichage(self,fichier):
@@ -27,7 +33,7 @@ class Test:
             with open('23440003400026_J335_installations_table.csv', newline='') as csvfile:
                 spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
                 for row in spamreader:
-                    print(', '.join(row))
+                        print(', '.join(row))
 
         elif fichier=="2":
             with open('equipements.csv', newline='') as csvfile:
@@ -85,6 +91,35 @@ class Test:
                 for line in reader:
                     cursor.execute('INSERT INTO Activities(ComInsee,ComLib,EquipementId,EquNbEquIdentique,ActCode,ActLib,EquActivitePraticable,EquActivitePratique,EquActiviteSalleSpe,ActNivLib) VALUES(?,?,?,?,?,?,?,?,?,?)',line)
                     conn.commit()
+
+    def importintolist(self,fichier):
+        conn = sqlite3.connect('ma_base.db')
+        cursor = conn.cursor()
+        if fichier == "1":
+            lines = cursor.execute("select * from Installation")
+            while True:
+                row = cursor.fetchone()
+                self.table.append(row)
+                if row == None: break
+            print(self.table)
+            conn.close()
+        if fichier == "2":
+            lines = cursor.execute("select * from Equipements")
+            while True:
+                row = cursor.fetchone()
+                self.equipements.append(row)
+                if row == None: break
+            print(self.equipements)
+            conn.close()
+        if fichier == "3":
+            lines = cursor.execute("select * from Activities")
+            while True:
+                row = cursor.fetchone()
+                self.activites.append(row)
+                if row == None: break
+            print(self.activites)
+            conn.close()
+
     """La fonction get_posts permet d'afficher le contenu de l'une des bases de données"""
     def get_posts(self,fichier):
         conn = sqlite3.connect('ma_base.db')
@@ -149,7 +184,8 @@ class Test:
         print("1.Afficher")
         print("2.Importer CSV")
         print("3.Recherche")
-        print("4.Quitter")
+        print("4.Importer dans la table")
+        print("5.Quitter")
         print("Saisir votre choix :")
         saisie = input()
         if saisie == "1":
@@ -200,10 +236,25 @@ class Test:
             elif num=="3":
                 self.getbyNomInstallation("3")
                 self.menu()
-        elif saisie=="4":
+        elif saisie == "4":
+            print("Saisir le num de la liste à importer :")
+            print("1.Installations")
+            print("2.Equipements")
+            print("3.Activités")
+            num = input()
+            if num == "1":
+                self.importintolist("1")
+                self.menu()
+            elif num == "2":
+                self.importintolist("2")
+                self.menu()
+            elif num == "3":
+                self.importintolist("3")
+                self.menu()
+        elif saisie== "5":
             print("Bye !")
             exit(0)
-        elif saisie!="1"or"2"or"3"or"4":
+        elif saisie!="1"or"2"or"3"or"4"or"5":
             print("Mauvaise touche veuillez recommencer")
             self.menu()
 
